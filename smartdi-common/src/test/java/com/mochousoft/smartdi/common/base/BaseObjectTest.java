@@ -1,5 +1,7 @@
 package com.mochousoft.smartdi.common.base;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
@@ -47,6 +49,8 @@ class BaseObjectTest {
 
         // 对比
         System.out.println(r1.equals(r2));
+        System.out.println(r1.hashCode());
+        System.out.println(r2.hashCode());
     }
 
     @Test
@@ -74,30 +78,41 @@ class BaseObjectTest {
         r2.setIsFinish(true);
 
         // 用于测试 HashMap 中对 hashcode 的使用场景
-        Map map = new HashMap();
-        map.put('1', r1);
-        map.put('2', r2);
+        Map<Object, Object> map1 = new HashMap<Object, Object>();
+        map1.put(r1, "我是r1");
+        map1.put(r2, "我是r2");
+
+        Map<Object, Object> map2 = new HashMap<Object, Object>();
+        map2.put("我是r1", r1);
+        map2.put("我是r2", r2);
 
         System.out.println("输出1: " + r1.hashCode());
         System.out.println("输出2: " + r2.hashCode());
-        System.out.println("输出3: " + map);
+        System.out.println("输出3: " + map1);
+        System.out.println("输出4: " + map1.get(r1));
+        System.out.println("输出5: " + map2);
 
         /*
-        以下三条数据是继承了 BaseObject 类，且重写了 hashCode 方法 的结果
-        可以发现 HashMap 中添加的两个 k-v 中的 v 是相同的，是因为 HashMap 中对象都记录了 hashcode，
-        而重写后的方法生成的 hashcode 相同，所以 HashMap 添加对象的时候直接引用了已存在的 hashcode 对应的对象，从而大大提高效率
+        以下三条数据是继承了 BaseObject 类，且重写了 hashCode 方法 的结果（重写后，虽然是不同的对象，但 hashcode 却相同）
+        由于 r1 和 r2 的 hashcode 和 equals 都相同，因此 “输出3” 只有一个键值对（第二次put把第一次put的值覆盖了）
+        HashMap中添加或查询对象的时候直接引用了已存在的 hashcode 对应的对象，从而大大提高效率，并减少内存占用
 
         输出1: 609978990
         输出2: 609978990
-        输出3: {1=com.mochousoft.smartdi.common.base.BaseObjectTest$TestRecord@245b8a6e, 2=com.mochousoft.smartdi.common.base.BaseObjectTest$TestRecord@245b8a6e}
-         */
+        输出3: {com.mochousoft.smartdi.common.base.BaseObjectTest$TestRecord@245b8a6e=我是r2}
+        输出4: 我是r2
+        输出5: {我是r1=com.mochousoft.smartdi.common.base.BaseObjectTest$TestRecord@245b8a6e, 我是r2=com.mochousoft.smartdi.common.base.BaseObjectTest$TestRecord@245b8a6e}
 
-        /*
+
+
         以下三条数据是调用 Objects 类原生 hashCode 方法 的结果（测试时，删除 TestRecord 类后面的 extends BaseObject）
+        两个对象的 hashcode 不一样
 
         输出1: 1011279482
         输出2: 208866101
-        输出3: {1=com.mochousoft.smartdi.common.base.BaseObjectTest$TestRecord@3c46e67a, 2=com.mochousoft.smartdi.common.base.BaseObjectTest$TestRecord@c730b35}
+        输出3: {com.mochousoft.smartdi.common.base.BaseObjectTest$TestRecord@c730b35=我是r2, com.mochousoft.smartdi.common.base.BaseObjectTest$TestRecord@3c46e67a=我是r1}
+        输出4: 我是r1
+        输出5: {我是r1=com.mochousoft.smartdi.common.base.BaseObjectTest$TestRecord@3c46e67a, 我是r2=com.mochousoft.smartdi.common.base.BaseObjectTest$TestRecord@c730b35}
          */
 
     }
@@ -128,6 +143,11 @@ class BaseObjectTest {
 
         System.out.println(r1);
         System.out.println(r2);
+
+        // https://blog.csdn.net/weixin_43989293/article/details/114880572
+
+        System.out.println(ToStringBuilder.reflectionToString(r1, ToStringStyle.JSON_STYLE));
+        System.out.println(ToStringBuilder.reflectionToString(r1, ToStringStyle.MULTI_LINE_STYLE));
     }
 
     static class TestRecord extends BaseObject {
