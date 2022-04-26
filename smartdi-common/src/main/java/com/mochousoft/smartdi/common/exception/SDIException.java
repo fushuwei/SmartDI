@@ -4,13 +4,13 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 
 /**
- *
+ * 系统全局异常类
  */
 public class SDIException extends RuntimeException {
 
     private static final long serialVersionUID = 1L;
 
-    private ErrorCode errorCode;
+    private final ErrorCode errorCode;
 
     public SDIException(ErrorCode errorCode, String errorMessage) {
         super(errorCode.toString() + " - " + errorMessage);
@@ -39,10 +39,6 @@ public class SDIException extends RuntimeException {
             return (SDIException) cause;
         }
         return new SDIException(errorCode, getMessage(cause), cause);
-    }
-
-    public ErrorCode getErrorCode() {
-        return this.errorCode;
     }
 
     private static String getMessage(Object obj) {
