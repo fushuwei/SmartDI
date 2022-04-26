@@ -20,7 +20,7 @@ public interface ErrorCode {
     String getDescription();
 
     /**
-     * 重新toString方法
+     * 必须重写 toString 方法
      *
      * @return
      */

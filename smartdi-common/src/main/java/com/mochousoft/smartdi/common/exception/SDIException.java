@@ -1,7 +1,6 @@
 package com.mochousoft.smartdi.common.exception;
 
-import java.io.PrintWriter;
-import java.io.StringWriter;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * 系统全局异常类
@@ -10,50 +9,41 @@ public class SDIException extends RuntimeException {
 
     private static final long serialVersionUID = 1L;
 
-    private final ErrorCode errorCode;
-
-    public SDIException(ErrorCode errorCode, String errorMessage) {
-        super(errorCode.toString() + " - " + errorMessage);
-        this.errorCode = errorCode;
+    private SDIException(ErrorCode code) {
+        super(code.toString());
     }
 
-    private SDIException(ErrorCode errorCode, String errorMessage, Throwable cause) {
-        super(errorCode.toString() + " - " + getMessage(errorMessage) + " - " + getMessage(cause), cause);
-
-        this.errorCode = errorCode;
+    private SDIException(ErrorCode code, String message) {
+        super(StringUtils.join(code, "\n\n", message));
     }
 
-    public static SDIException asException(ErrorCode errorCode, String message) {
-        return new SDIException(errorCode, message);
+    private SDIException(ErrorCode code, String message, Throwable cause) {
+        super(StringUtils.join(code, "\n\n", message), cause);
     }
 
-    public static SDIException asException(ErrorCode errorCode, String message, Throwable cause) {
+    private SDIException(ErrorCode code, Throwable cause) {
+        super(code.toString(), cause);
+    }
+
+    public static SDIException newInstance(ErrorCode code) {
+        return new SDIException(code);
+    }
+
+    public static SDIException newInstance(ErrorCode code, String message) {
+        return new SDIException(code, message);
+    }
+
+    public static SDIException newInstance(ErrorCode code, String message, Throwable cause) {
         if (cause instanceof SDIException) {
             return (SDIException) cause;
         }
-        return new SDIException(errorCode, message, cause);
+        return new SDIException(code, message, cause);
     }
 
-    public static SDIException asException(ErrorCode errorCode, Throwable cause) {
+    public static SDIException newInstance(ErrorCode code, Throwable cause) {
         if (cause instanceof SDIException) {
             return (SDIException) cause;
         }
-        return new SDIException(errorCode, getMessage(cause), cause);
-    }
-
-    private static String getMessage(Object obj) {
-        if (obj == null) {
-            return "";
-        }
-
-        if (obj instanceof Throwable) {
-            StringWriter str = new StringWriter();
-            PrintWriter pw = new PrintWriter(str);
-            ((Throwable) obj).printStackTrace(pw);
-            return str.toString();
-            // return ((Throwable) obj).getMessage();
-        } else {
-            return obj.toString();
-        }
+        return new SDIException(code, cause);
     }
 }

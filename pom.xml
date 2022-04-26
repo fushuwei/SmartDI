@@ -18,11 +18,12 @@
     </modules>
 
     <properties>
+        <commons-lang3.version>3.12.0</commons-lang3.version>
+        <commons-io.version>2.11.0</commons-io.version>
+        <fastjson.version>1.2.80</fastjson.version>
         <slf4j-api.version>1.7.36</slf4j-api.version>
         <logback-classic.version>1.2.10</logback-classic.version>
         <junit-jupiter.version>5.8.2</junit-jupiter.version>
-        <commons-lang3.version>3.12.0</commons-lang3.version>
-        <commons-io.version>2.11.0</commons-io.version>
     </properties>
 
     <!-- 所有模块都必须引用的依赖项 -->
@@ -40,6 +41,11 @@
         </dependency>
 
         <!-- fastjson -->
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>fastjson</artifactId>
+            <version>${fastjson.version}</version>
+        </dependency>
 
         <!-- 日志组件 -->
         <dependency>
