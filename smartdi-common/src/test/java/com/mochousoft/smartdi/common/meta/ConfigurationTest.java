@@ -42,15 +42,18 @@ class ConfigurationTest {
     void test3() {
         // 取值，精确返回类型
 
-        String json = "{\"data\":{\"total\":2.0,\"records\":[{\"name\":\"张三\",\"age\":18},{\"name\":\"李四\",\"age\":20}]}}";
+        String json = "{'score':99.99,'name':'','detail':{'yy':100,'sx':99.5},'age':18,'email':'[\"a\", \"b\"]', 'success': true, 'phone': 12345678910}";
 
         Configuration config = Configuration.newInstance(json);
 
-        // double total = config.get("data.total");
-        String name = config.getString("data.records.name[0]");
-        // int age = config.get("data.records.age[0]");
-
-        System.out.println(config);
-        System.out.println(name);
+        System.out.println(config.get("."));
+        System.out.println(config.getString("name", "张三"));
+        System.out.println(config.getInt("age"));
+        System.out.println(config.getLong("phone"));
+        System.out.println(config.getDouble("score"));
+        System.out.println(config.getBoolean("success"));
+        System.out.println(config.getJSONObject("detail"));
+        System.out.println(config.getJSONObject("detail").getDouble("sx"));
+        System.out.println(config.getJSONArray("email"));
     }
 }

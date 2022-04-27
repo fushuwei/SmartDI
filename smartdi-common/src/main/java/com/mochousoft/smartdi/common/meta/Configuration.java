@@ -1,6 +1,7 @@
 package com.mochousoft.smartdi.common.meta;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.JSONPath;
 import com.mochousoft.smartdi.common.exception.SDIException;
@@ -81,13 +82,17 @@ public class Configuration {
      * @return 字符串
      */
     public String getString(final String path) {
-        Object result = this.get(path);
-
-        if (result == null) {
+        Object obj = this.get(path);
+        if (obj == null) {
             return null;
         }
 
-        return String.valueOf(result);
+        String result = String.valueOf(obj);
+        if (StringUtils.isBlank(result)) {
+            return null;
+        }
+
+        return result;
     }
 
     /**
@@ -124,7 +129,7 @@ public class Configuration {
             return Integer.valueOf(result);
         } catch (Exception e) {
             throw SDIException.newInstance(GlobalErrorCode.CONFIG_ERROR,
-                    String.format("读取配置出错，路径 %s 对应的值 %s 无法转成整数类型", path, result), e);
+                    String.format("读取配置出错，路径 [%s] 对应的值 [%s] 无法转成整数类型", path, result), e);
         }
     }
 
@@ -162,7 +167,7 @@ public class Configuration {
             return Long.valueOf(result);
         } catch (Exception e) {
             throw SDIException.newInstance(GlobalErrorCode.CONFIG_ERROR,
-                    String.format("读取配置出错，路径 %s 对应的值 %s 无法转成整数类型", path, result), e);
+                    String.format("读取配置出错，路径 [%s] 对应的值 [%s] 无法转成整数类型", path, result), e);
         }
     }
 
@@ -200,7 +205,7 @@ public class Configuration {
             return Double.valueOf(result);
         } catch (Exception e) {
             throw SDIException.newInstance(GlobalErrorCode.CONFIG_ERROR,
-                    String.format("读取配置出错，路径 %s 对应的值 %s 无法转成浮点类型", path, result), e);
+                    String.format("读取配置出错，路径 [%s] 对应的值 [%s] 无法转成浮点类型", path, result), e);
         }
     }
 
@@ -238,7 +243,7 @@ public class Configuration {
             return false;
         } else {
             throw SDIException.newInstance(GlobalErrorCode.CONFIG_ERROR,
-                    String.format("读取配置出错，路径 %s 对应的值 %s 无法转成布尔类型", path, result));
+                    String.format("读取配置出错，路径 [%s] 对应的值 [%s] 无法转成布尔类型", path, result));
         }
     }
 
@@ -254,6 +259,82 @@ public class Configuration {
 
         if (result == null) {
             return defaultValue;
+        }
+
+        return result;
+    }
+
+    /**
+     * 取值
+     *
+     * @param path json寻址路径
+     * @return JSONObject
+     */
+    public JSONObject getJSONObject(final String path) {
+        String result = this.getString(path);
+
+        if (result == null) {
+            return null;
+        }
+
+        try {
+            return JSON.parseObject(result);
+        } catch (Exception e) {
+            throw SDIException.newInstance(GlobalErrorCode.CONFIG_ERROR,
+                    String.format("读取配置出错，路径 [%s] 对应的值 [%s] 无法转成JSONObject类型", path, result), e);
+        }
+    }
+
+    /**
+     * 取值
+     *
+     * @param path         json寻址路径
+     * @param defaultValue 默认值
+     * @return JSONObject
+     */
+    public JSONObject getJSONObject(final String path, final JSONObject defaultValue) {
+        JSONObject result = this.getJSONObject(path);
+
+        if (result == null) {
+            result = defaultValue;
+        }
+
+        return result;
+    }
+
+    /**
+     * 取值
+     *
+     * @param path json寻址路径
+     * @return JSONArray
+     */
+    public JSONArray getJSONArray(final String path) {
+        String result = this.getString(path);
+
+        if (result == null) {
+            return null;
+        }
+
+        try {
+            return JSON.parseArray(result);
+        } catch (Exception e) {
+            throw SDIException.newInstance(GlobalErrorCode.CONFIG_ERROR,
+                    String.format("读取配置出错，路径 [%s] 对应的值 [%s] 无法转成JSONArray类型", path, result), e);
+        }
+    }
+
+    /**
+     * 取值
+     *
+     * @param path         json寻址路径
+     * @param defaultValue 默认值
+     * @return JSONArray
+     */
+    public JSONArray getJSONArray(final String path, final JSONArray defaultValue) {
+        JSONArray result = this.getJSONArray(path);
+
+        if (result == null) {
+            result = defaultValue;
         }
 
         return result;
@@ -282,7 +363,7 @@ public class Configuration {
         for (final String item : !".".equals(path) ? path.split("\\.", -1) : new String[]{}) {
             if (StringUtils.isBlank(item)) {
                 throw SDIException.newInstance(GlobalErrorCode.DEFAULT_ERROR,
-                        String.format("系统编程错误, json的寻址路径 %s 不合法, 路径层次之间不能出现空白字符", path));
+                        String.format("系统编程错误, json的寻址路径 [%s] 不合法, 路径层级之间不能是空白符", path));
             }
         }
     }
