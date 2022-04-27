@@ -9,7 +9,7 @@ public enum GlobalErrorCode implements ErrorCode {
     DEFAULT_ERROR("SDI-99999", "SDI引擎运行出错，请根据报错信息排查原因"),
 
     // 任务配置信息错误代码
-    CONFIG_DEFAULT_ERROR("SDI-00100", "配置信息错误，请检查您在调用SDI引擎时提供的配置是否正确"),
+    CONFIG_ERROR("SDI-00100", "配置信息错误，请检查您在调用SDI引擎时提供的配置是否正确"),
     CONFIG_NOT_FOUND("SDI-00101", "配置信息不存在，请检查您在调用SDI引擎时是否提供了配置信息"),
     CONFIG_FORMAT_ERROR("SDI-00102", "配置信息错误，您在调用SDI引擎时提供的配置信息不是合法的JSON格式"),
 
