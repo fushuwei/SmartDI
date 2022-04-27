@@ -68,7 +68,7 @@ public class Configuration {
     public Object get(final String path) {
         checkPath(path);
 
-        // 判断json中是否包含
+        // 判断json中是否包含该寻址路径
         if (!JSONPath.contains(this.jConfig, path)) {
             return null;
         }
@@ -348,7 +348,49 @@ public class Configuration {
      * @param obj  值
      */
     public void set(final String path, final Object obj) {
+        checkPath(path);
 
+        boolean isSuccess;
+
+        try {
+            isSuccess = JSONPath.set(this.jConfig, path, obj);
+        } catch (Exception e) {
+            throw SDIException.newInstance(GlobalErrorCode.DEFAULT_ERROR,
+                    String.format("系统编程错误, 在配置信息中添加配置项 [%s: %s] 失败", path, obj), e);
+        }
+
+        if (!isSuccess) {
+            throw SDIException.newInstance(GlobalErrorCode.DEFAULT_ERROR,
+                    String.format("系统编程错误, 在配置信息中添加配置项 [%s: %s] 失败", path, obj));
+        }
+    }
+
+    /**
+     * 删除
+     *
+     * @param path json寻址路径
+     */
+    public void remove(final String path) {
+        checkPath(path);
+
+        // 判断json中是否包含该寻址路径
+        if (!JSONPath.contains(this.jConfig, path)) {
+            return;
+        }
+
+        boolean isSuccess;
+
+        try {
+            isSuccess = JSONPath.remove(this.jConfig, path);
+        } catch (Exception e) {
+            throw SDIException.newInstance(GlobalErrorCode.DEFAULT_ERROR,
+                    String.format("系统编程错误, 在配置信息中删除配置项 [%s] 失败", path), e);
+        }
+
+        if (!isSuccess) {
+            throw SDIException.newInstance(GlobalErrorCode.DEFAULT_ERROR,
+                    String.format("系统编程错误, 在配置信息中删除配置项 [%s] 失败", path));
+        }
     }
 
     /**
