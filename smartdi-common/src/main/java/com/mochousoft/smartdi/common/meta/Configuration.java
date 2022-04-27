@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.JSONPath;
+import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.mochousoft.smartdi.common.exception.SDIException;
 import com.mochousoft.smartdi.common.exception.impl.GlobalErrorCode;
 import org.apache.commons.lang3.StringUtils;
@@ -370,6 +371,6 @@ public class Configuration {
 
     @Override
     public String toString() {
-        return this.jConfig.toJSONString();
+        return JSON.toJSONString(this.jConfig, SerializerFeature.PrettyFormat);
     }
 }

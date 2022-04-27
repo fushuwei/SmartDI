@@ -42,11 +42,13 @@ class ConfigurationTest {
     void test3() {
         // 取值，精确返回类型
 
-        String json = "{'score':99.99,'name':'','detail':{'yy':100,'sx':99.5},'age':18,'email':'[\"a\", \"b\"]', 'success': true, 'phone': 12345678910}";
+        String json = "{'score':99.99,'name':'','detail':{'yy':100,'sx':99.5},'age':18,'email':['a', 'b'], 'success': true, 'phone': 12345678910}";
 
         Configuration config = Configuration.newInstance(json);
 
+        System.out.println(config);
         System.out.println(config.get("."));
+        System.out.println(config.getString("."));
         System.out.println(config.getString("name", "张三"));
         System.out.println(config.getInt("age"));
         System.out.println(config.getLong("phone"));
