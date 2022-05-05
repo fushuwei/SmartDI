@@ -1,4 +1,4 @@
-package com.mochousoft.smartdi.common.meta;
+package com.mochousoft.smartdi.common.type;
 
 /**
  * 列类型

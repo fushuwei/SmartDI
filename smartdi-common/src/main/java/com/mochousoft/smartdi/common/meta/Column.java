@@ -1,6 +1,7 @@
 package com.mochousoft.smartdi.common.meta;
 
 import com.mochousoft.smartdi.common.base.BaseObject;
+import com.mochousoft.smartdi.common.type.ColumnType;
 
 /**
  * 列信息

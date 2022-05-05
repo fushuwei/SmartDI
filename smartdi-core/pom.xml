@@ -12,4 +12,11 @@
 
     <artifactId>smartdi-core</artifactId>
 
+    <dependencies>
+        <dependency>
+            <groupId>com.mochousoft</groupId>
+            <artifactId>smartdi-common</artifactId>
+        </dependency>
+    </dependencies>
+
 </project>

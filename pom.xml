@@ -18,6 +18,7 @@
     </modules>
 
     <properties>
+        <smartdi.version>0.0.1-SNAPSHOT</smartdi.version>
         <commons-lang3.version>3.12.0</commons-lang3.version>
         <commons-io.version>2.11.0</commons-io.version>
         <fastjson.version>1.2.80</fastjson.version>
@@ -71,7 +72,12 @@
     <!-- 规范依赖项的版本 -->
     <dependencyManagement>
         <dependencies>
-
+            <!-- SmartDI相关组件 -->
+            <dependency>
+                <groupId>com.mochousoft</groupId>
+                <artifactId>smartdi-common</artifactId>
+                <version>${smartdi.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
